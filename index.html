@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TODO APP</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="add-task">
+        <h1 class="TASK-title">TASK</h1>
+        <button class="add-task-btn">+</button>
+    </div>
+    <div class="progress-navigation">
+<p>0 Task | 2 In Progress | 2 Done </p> </div>
+    </header>
+
+<main>
+    <section class="task-list">
+
+    </section>
+<div class="donow">
+    <div class="head-donow"><p>Do Now</p> <div class="completion-summary">0/0</div></div>
+
+</div>
+
+</main>
+    <!-- add-task-pop-up -->
+    <div class="popup">
+        <div class="popup-content">
+            <div class="close-btn">X</div>
+            <h2>Add New Task</h2>
+            <form action="#">
+                <div class="input-field">
+                <label for="task-title">Task Title</label>
+                <input type="text" id="task-title" >
+                </div>
+                
+                <div class="input-field">
+                <label for="task-date">Due Date</label>
+                <input type="date" id="task-date" >
+                </div>
+                <div class="input-field">
+                <label for="task-time">Due Time</label>
+                <input type="time" id="task-time" >
+               
+                </div>
+                <div class="input-field">
+                <label for="task-state">Task State</label>
+                <select id="task-state" >
+                    <option value="Done">Done</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Not started">Not Started</option>
+                </select>
+                </div>
+                <div class="input-field">
+                <label for="task-priority">Priority</label>
+                <select id="task-priority" >
+                    <option value="High">High</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Low">Low</option>
+                </select>
+                </div>
+                <button type="submit" class="submit-btn">Add Task</button>
+            </form>
+        </div>
+    </div>
+</body>
+<script src="script.js"></script>
+</html>
