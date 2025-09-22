@@ -77,8 +77,10 @@ main{
     width: 60%;
     border-top-left-radius: 50px;
     border-bottom-left-radius: 50px;
-
-    min-height: inherit;
+    height: 80vh;
+overflow-y: scroll;
+    scrollbar-width: none; 
+    overflow-y: scroll;
     border: 2px solid var(--header-bg-color);
     border-right: none;
 
@@ -89,8 +91,11 @@ main{
     border-bottom-right-radius: 50px;
     
     border-TOP-right-radius: 50px;
-    min-height: inherit;
-    overflow: hidden;    
+    height: 80vh;
+    
+    overflow: hidden;  
+    scrollbar-width: none; 
+    overflow-y: scroll; 
 }
 .head-donow{
     display: flex;
@@ -230,4 +235,123 @@ button:hover{
 .grey{
     background-color: grey;
     color:white
+}
+.timer-popup{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+.timer-popup-content{
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    
+    width: 40%;
+    display: flex;
+    flex-wrap: wrap;
+    height: 40vh;
+    gap: 2px;
+}
+.timer-display{
+    font-size: 3rem;
+    font-weight: bold;
+}
+.timer-controls{
+    display: flex;
+    gap: 1px;
+}
+.timer-control{
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}   
+.input-field-timer{
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+}
+.timer-label{
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+}
+.timer-input{
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+.timer-button{
+    background-color: var(--header-bg-color);
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    width: 150px;
+    height: 50px;
+    border-radius: 5%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.timer-button:hover{
+    background-color: var(--header-box-color);
+}
+.timer-popup-content form input{
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+    align-self: flex-start;
+    width: 50px;
+    
+}
+.timer-popup-content form{
+    width: 100%;
+    display: flex;
+    font-size: 2rem;
+    font-weight: bolder;
+    flex-wrap: wrap;
+   justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+}
+.timer-close-header{
+    display: flex;
+    justify-content:space-between;
+    position:relative;
+    top:0;
+    width: 100vw ;
+    align-items: center;
+    margin-bottom: 10px;
+    height: fit-content;
+    
+}
+.start-timer{
+    align-self: center; 
+    margin-top: 10px;
+    position: relative;
+    left: 35%;
+}
+.close-timer-btn{
+    align-self: flex-end;
+    background-color: var(--header-bg-color);
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    width: 100px;
+    height: 40px;
+    border-radius: 5%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.close-timer-btn:hover{
+    background-color: var(--header-box-color);      
 }

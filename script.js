@@ -1,4 +1,5 @@
 tasks=[];
+let currentTimerTaskIndex = null; // tracks which task the timer is for
 document.querySelector(".add-task-btn").addEventListener("click",function(){
     document.querySelector(".popup").style.display="flex";
     document.querySelector("#task-title").focus();
@@ -29,10 +30,12 @@ document.querySelector(".submit-btn").addEventListener("click",function(){
 
     document.querySelector("#task-time").value="";
     document.querySelector("#task-priority").value="";
-
+  
+    updateProgressNavigation();
     updateTaskList();
 });
-function updateTaskList(){
+function updateTaskList()
+{
     let tasklistcontainer=document.querySelector(".task-list");
     tasklistcontainer.innerHTML="";
     tasks.forEach(function(task,index){
@@ -50,7 +53,7 @@ switch(task.state) {
         color = "green";
         break;
     default:
-        color = "gray";
+        color = "grey";
 }
 let priority_color;
 switch(task.priority) {
@@ -60,11 +63,11 @@ switch(task.priority) {
     case "Medium":
         priority_color = "orange";
         break;
-    case "Low   ":
+    case "Low":
         priority_color = "green";
         break;
     default:
-        priority_color = "gray";
+        priority_color = "grey";
 }
         taskitem.innerHTML=`
 
@@ -74,9 +77,10 @@ switch(task.priority) {
          <p class=${priority_color}>Priority: ${task.priority}</p>
   </div>
         <p  id="due">Due-Date:${task.date}</p>
-         <div button-container >    
+         <div class="button-container">    
         <button class="edit-btn" data-index="${index}">Edit</button>
         <button class="delete-btn" data-index="${index}">Delete</button>
+        <button class="donow-btn" data-index="${index}">Do Now</button>
         </div>
         `;
         tasklistcontainer.appendChild(taskitem);
@@ -86,6 +90,9 @@ switch(task.priority) {
             let index=this.getAttribute("data-index");
             tasks.splice(index,1);
             updateTaskList();
+            
+    updateProgressNavigation();
+  
         });
     });
     document.querySelectorAll(".edit-btn").forEach(function(button){
@@ -101,7 +108,98 @@ switch(task.priority) {
             document.querySelector(".popup").style.display="flex";
             tasks.splice(index,1);
             updateTaskList();
+            
+    updateProgressNavigation();
+  
         });
     });
 
+document.querySelectorAll(".donow-btn").forEach(function(button){
+       
+        button.addEventListener("click",function(){
+            let index=this.getAttribute("data-index");
+            let task=tasks[index];
+            if (task.state!=="Done"){
+            document.querySelector(".donow").innerHTML+=`
+            <div class="donow-item">
+            <h3>${task.name}</h3>
+            <p id="due">Due-Date:${task.date}</p>
+            </div>
+            <button class="start-timer-btn" data-index="${index}">Start Timer</button>
+            
+            `;
+        
+        }
+            else{
+                alert("Task already completed");
+            }
+  
+        });
+    });
+
+}
+function updateProgressNavigation(){
+    let totalTasks=tasks.length;
+    let completedTasks=tasks.filter(task=>task.state==="Done").length;
+    let inprogressTasks=tasks.filter(task=>task.state==="In Progress").length;
+    let notstartedTasks=tasks.filter(task=>task.state==="Not started").length;
+    document.querySelector(".progress-navigation").innerHTML=`<p> ${totalTasks} Tasks | ${inprogressTasks} In Progress | ${completedTasks} Done  </p>`;
+
+
+}
+function startCountdown(totalSeconds,taskIndex){
+    let countdownElement=document.querySelector("#countdown-timer");
+    let countdownWrapper=document.querySelector(".countdown-display");
+    if (countdownWrapper) countdownWrapper.style.display = "block";
+    let countdownInterval=setInterval(function(){
+        let hours=Math.floor(totalSeconds/3600);
+        let minutes=Math.floor((totalSeconds%3600)/60);
+        let seconds=totalSeconds%60;
+        countdownElement.innerHTML=`${hours.toString().padStart(2,"0")}:${minutes.toString().padStart(2,"0")}:${seconds.toString().padStart(2,"0")}`;
+        if(totalSeconds<=0){
+            clearInterval(countdownInterval);
+            countdownElement.innerHTML="Time's up!";
+            tasks[taskIndex].state="Done";
+            updateTaskList();
+            updateProgressNavigation();
+        }
+        totalSeconds--;
+    },1000);
+    
+updateTaskList();
+updateProgressNavigation();
+}
+
+const donowContainer = document.querySelector(".donow");
+if (donowContainer) {
+    donowContainer.addEventListener("click", function(e){
+        const target = e.target;
+        if (target && target.classList && target.classList.contains("start-timer-btn")) {
+            const idxAttr = target.getAttribute("data-index");
+            currentTimerTaskIndex = idxAttr !== null ? parseInt(idxAttr,10) : null;
+            document.querySelector(".timer-popup").style.display = "flex";
+        }
+    });
+}
+const closeTimerBtn = document.querySelector(".close-timer-btn");
+if (closeTimerBtn) {
+    closeTimerBtn.addEventListener("click", function(){
+        document.querySelector(".timer-popup").style.display = "none";
+    });
+}
+const startTimerBtn = document.querySelector(".start-timer");
+if (startTimerBtn) {
+    startTimerBtn.addEventListener("click", function(e){
+        e.preventDefault();
+        let hours = parseInt(document.querySelector("#timer-hours").value) || 0;
+        let minutes = parseInt(document.querySelector("#timer-minutes").value) || 0;
+        let seconds = parseInt(document.querySelector("#timer-seconds").value) || 0;
+        let totalSeconds = hours*3600 + minutes*60 + seconds;
+        if(totalSeconds>0 && currentTimerTaskIndex !== null){
+            startCountdown(totalSeconds, currentTimerTaskIndex);
+        }
+        else{
+            alert("Please select a task and enter a valid time");
+        }
+    });
 }
