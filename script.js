@@ -1,5 +1,5 @@
 tasks=[];
-let currentTimerTaskIndex = null; // tracks which task the timer is for
+let currentTimerTaskIndex = null; 
 document.querySelector(".add-task-btn").addEventListener("click",function(){
     document.querySelector(".popup").style.display="flex";
     document.querySelector("#task-title").focus();
