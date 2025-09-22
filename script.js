@@ -119,15 +119,7 @@ document.querySelectorAll(".donow-btn").forEach(function(button){
         button.addEventListener("click",function(){
             let index=this.getAttribute("data-index");
             let task=tasks[index];
-            if (task.state!=="Done"){
-            document.querySelector(".donow").innerHTML+=`
-            <div class="donow-item">
-            <h3>${task.name}</h3>
-            <p id="due">Due-Date:${task.date}</p>
-            </div>
-            <button class="start-timer-btn" data-index="${index}">Start Timer</button>
-            
-            `;
+            if (task.state!=="Done"){ updatedonowlist();
         
         }
             else{
@@ -202,4 +194,37 @@ if (startTimerBtn) {
             alert("Please select a task and enter a valid time");
         }
     });
+
 }
+const skiptimerbtn=document.querySelector(".skip-timer-btn");
+if (skiptimerbtn) {
+    skiptimerbtn.addEventListener("click", function(){
+        if (currentTimerTaskIndex !== null) {
+            tasks[currentTimerTaskIndex].state = "Done";
+            updateTaskList();
+            updateProgressNavigation();
+        }
+        document.querySelector(".timer-popup").style.display = "none";
+    }
+);
+}
+function updatedonowlist(){
+    let donowlistcontainer=document.querySelector(".donow");
+    donowContainer.innerHTML="";
+    tasks.forEach(function(task,index){
+        let donowitem=document.createElement("div");
+        donowitem.classList.add("donow-item");
+        if (task.state !== "Done") {
+            donowitem.innerHTML=`
+            <div class="donow-item">
+            <h3>${task.name}</h3>
+            <p id="due">Due-Date:${task.date}</p>
+            </div>
+            <button class="start-timer-btn" data-index="${index}">Start Timer</button>
+            
+            `
+            donowlistcontainer.appendChild(donowitem);
+            }
+        });
+        
+        }

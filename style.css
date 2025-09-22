@@ -335,7 +335,7 @@ button:hover{
     align-self: center; 
     margin-top: 10px;
     position: relative;
-    left: 35%;
+    left: 50%;
 }
 .close-timer-btn{
     align-self: flex-end;
@@ -354,4 +354,10 @@ button:hover{
 }
 .close-timer-btn:hover{
     background-color: var(--header-box-color);      
+}
+.skip-timer-btn{
+    align-self: center; 
+    margin-top: 10px;
+
+
 }

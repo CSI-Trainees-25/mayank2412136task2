@@ -12,20 +12,18 @@
         <h1 class="TASK-title">TASK</h1>
         <button class="add-task-btn">+</button>
     </div>
+    <div class="controls">
+        <button class="start-all-btn">Start</button>
+        <button class="end-session-btn">End Session</button>
+    </div>
     <div class="progress-navigation">
-<p>0 Task | 0 In Progress | 0 Done </p> </div>
+        <p>0 Tasks | 0 In Progress | 0 Done </p>
+    </div>
     </header>
 
 <main>
-    <section class="task-list">
-
+    <section class="task-list" id="task-list">
     </section>
-<div class="donow">
-    <div class="head-donow">
-        <p>Do Now</p> <div class="completion-summary">0/0</div>
-    </div>
-
-</div>
 
 </main>
     <!-- add-task-pop-up -->
@@ -40,63 +38,20 @@
                 </div>
                 
                 <div class="input-field">
-                <label for="task-date">Due Date</label>
+                <label for="task-date">Task Date</label>
                 <input type="date" id="task-date" >
                 </div>
                 <div class="input-field">
-                <label for="task-time">Due Time</label>
+                <label for="task-time">Task Time</label>
                 <input type="time" id="task-time" >
                
                 </div>
                 <div class="input-field">
-                <label for="task-state">Task State</label>
-                <select id="task-state" >
-                    <option value="Done">Done</option>
-                    <option value="In Progress">In Progress</option>
-                    <option value="Not started">Not Started</option>
-                </select>
-                </div>
-                <div class="input-field">
-                <label for="task-priority">Priority</label>
-                <select id="task-priority" >
-                    <option value="High">High</option>
-                    <option value="Medium">Medium</option>
-                    <option value="Low">Low</option>
-                </select>
+                <label for="task-duration">Duration (minutes)</label>
+                <input type="number" id="task-duration" min="1" value="25">
                 </div>
                 <button type="submit" class="submit-btn">Add Task</button>
             </form>
-        </div>
-    </div>
-    <!-- timer popup -->
-    <div class="timer-popup">
-        <div class="timer-popup-content">
-            <div class="timer-display"></div>
-            <div class="timer-close-header" > <button class="close-timer-btn">x</button> <h2>Set Timer</h2>   </div>
-            
-            <form action="#">
-                <div class="input-field-timer">
-                <label for="timer-hours">Hours</label>
-                <input type="number" id="timer-hours" min="0" value="0">
-                </div>
-                :
-                
-                <div class="input-field-timer">
-                <label for="timer-minutes">Minutes</label>
-                <input type="number" id="timer-minutes" min="0" max="59" value="0">
-                </div>
-                :
-                <div class="input-field-timer">
-                <label for="timer-seconds">Seconds</label>
-                <input type="number" id="timer-seconds" min="0" max="59" value="0">
-
-                </div>
-            </form>
-            
-                <button type="submit" class="start-timer">Start Timer</button>
-            <div class="countdown-display" style="display:none;">
-                <h3>Time Remaining: <span id="countdown-timer">00:00:00</span></h3>
-            </div>
         </div>
     </div>
 
