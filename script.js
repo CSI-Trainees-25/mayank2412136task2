@@ -1,5 +1,26 @@
 tasks=[];
-let currentTimerTaskIndex = null; 
+const TASKS_KEY = 'todo_tasks_v1';
+function saveTasks(){
+    
+        localStorage.setItem(TASKS_KEY
+            , JSON.stringify(tasks));
+    
+}
+function loadTasks(){
+   
+        const raw = localStorage.getItem(TASKS_KEY);
+        if (!raw) return [];
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed.map(t => ({
+            name: t.name || '',
+            state: t.state || 'Not started',
+            date: t.date || '',
+            priority: t.priority || 'Low',
+            doNow: !!t.doNow,
+            durationSeconds: typeof t.durationSeconds === 'number' ? t.durationSeconds : 0,
+        })) : [];
+    
+}
 document.querySelector(".add-task-btn").addEventListener("click",function(){
     document.querySelector(".popup").style.display="flex";
     document.querySelector("#task-title").focus();
@@ -15,15 +36,22 @@ document.querySelector(".submit-btn").addEventListener("click",function(){
     let taskdate=document.querySelector("#task-date").value    ;
      let taskpriority=document.querySelector("#task-priority").value;
      let taskstate=document.querySelector('#task-state').value;
+     
+     let durH = parseInt(document.querySelector('#task-duration-hours')?.value || '0') || 0;
+     let durM = parseInt(document.querySelector('#task-duration-minutes')?.value || '0') || 0;
+     let durS = parseInt(document.querySelector('#task-duration-seconds')?.value || '0') || 0;
+     let durationSeconds = Math.max(0, durH*3600 + durM*60 + durS);
     let newtask={
 
         name:taskname,
         state:taskstate,
         date:taskdate,
         priority:taskpriority,
+        doNow:false,
+        durationSeconds: durationSeconds,
     }
     tasks.push(newtask);
-    console.log(tasks);
+    saveTasks();
     document.querySelector(".popup").style.display="none";
     document.querySelector("#task-title").value="";
     document.querySelector("#task-state").value="";
@@ -33,6 +61,7 @@ document.querySelector(".submit-btn").addEventListener("click",function(){
   
     updateProgressNavigation();
     updateTaskList();
+    updatedonowlist();
 });
 function updateTaskList()
 {
@@ -41,6 +70,13 @@ function updateTaskList()
     tasks.forEach(function(task,index){
         let taskitem=document.createElement("div");
         taskitem.classList.add("task-item");
+
+
+        taskitem.setAttribute('draggable','true');
+        taskitem.setAttribute('data-index', index);
+        taskitem.addEventListener('dragstart', (ev) => {
+            ev.dataTransfer.setData('text/plain', String(index));
+        });
       let color;
 switch(task.state) {
     case "Not started":
@@ -76,7 +112,8 @@ switch(task.priority) {
 <p class=${color}>Status:${task.state}</p>
          <p class=${priority_color}>Priority: ${task.priority}</p>
   </div>
-        <p  id="due">Due-Date:${task.date}</p>
+    <p  id="due">Due-Date:${task.date}</p>
+    <p class="duration">Duration: ${formatSeconds(task.durationSeconds || 0)}</p>
          <div class="button-container">    
         <button class="edit-btn" data-index="${index}">Edit</button>
         <button class="delete-btn" data-index="${index}">Delete</button>
@@ -89,9 +126,11 @@ switch(task.priority) {
         button.addEventListener("click",function(){
             let index=this.getAttribute("data-index");
             tasks.splice(index,1);
+            saveTasks();
             updateTaskList();
             
     updateProgressNavigation();
+    updatedonowlist();
   
         });
     });
@@ -107,9 +146,11 @@ switch(task.priority) {
             document.querySelector("#task-priority").value=task.priority;
             document.querySelector(".popup").style.display="flex";
             tasks.splice(index,1);
+            saveTasks();
             updateTaskList();
             
     updateProgressNavigation();
+    updatedonowlist();
   
         });
     });
@@ -119,7 +160,11 @@ document.querySelectorAll(".donow-btn").forEach(function(button){
         button.addEventListener("click",function(){
             let index=this.getAttribute("data-index");
             let task=tasks[index];
-            if (task.state!=="Done"){ updatedonowlist();
+            if (task.state!=="Done"){ 
+        
+    tasks[index].doNow = true;
+    saveTasks();
+        updatedonowlist();
         
         }
             else{
@@ -134,97 +179,229 @@ function updateProgressNavigation(){
     let totalTasks=tasks.length;
     let completedTasks=tasks.filter(task=>task.state==="Done").length;
     let inprogressTasks=tasks.filter(task=>task.state==="In Progress").length;
-    let notstartedTasks=tasks.filter(task=>task.state==="Not started").length;
     document.querySelector(".progress-navigation").innerHTML=`<p> ${totalTasks} Tasks | ${inprogressTasks} In Progress | ${completedTasks} Done  </p>`;
-
-
 }
-function startCountdown(totalSeconds,taskIndex){
-    let countdownElement=document.querySelector("#countdown-timer");
-    let countdownWrapper=document.querySelector(".countdown-display");
-    if (countdownWrapper) countdownWrapper.style.display = "block";
-    let countdownInterval=setInterval(function(){
-        let hours=Math.floor(totalSeconds/3600);
-        let minutes=Math.floor((totalSeconds%3600)/60);
-        let seconds=totalSeconds%60;
-        countdownElement.innerHTML=`${hours.toString().padStart(2,"0")}:${minutes.toString().padStart(2,"0")}:${seconds.toString().padStart(2,"0")}`;
-        if(totalSeconds<=0){
-            clearInterval(countdownInterval);
-            countdownElement.innerHTML="Time's up!";
-            tasks[taskIndex].state="Done";
-            updateTaskList();
-            updateProgressNavigation();
-        }
-        totalSeconds--;
-    },1000);
-    
-updateTaskList();
-updateProgressNavigation();
+
+function formatSeconds(totalSeconds){
+    totalSeconds = totalSeconds || 0;
+    const h = Math.floor(totalSeconds/3600);
+    const m = Math.floor((totalSeconds%3600)/60);
+    const s = totalSeconds%60;
+    return  `${h}:${m}:${s}`;
 }
 
 const donowContainer = document.querySelector(".donow");
 if (donowContainer) {
-    donowContainer.addEventListener("click", function(e){
-        const target = e.target;
-        if (target && target.classList && target.classList.contains("start-timer-btn")) {
-            const idxAttr = target.getAttribute("data-index");
-            currentTimerTaskIndex = idxAttr !== null ? parseInt(idxAttr,10) : null;
-            document.querySelector(".timer-popup").style.display = "flex";
-        }
-    });
-}
-const closeTimerBtn = document.querySelector(".close-timer-btn");
-if (closeTimerBtn) {
-    closeTimerBtn.addEventListener("click", function(){
-        document.querySelector(".timer-popup").style.display = "none";
-    });
-}
-const startTimerBtn = document.querySelector(".start-timer");
-if (startTimerBtn) {
-    startTimerBtn.addEventListener("click", function(e){
+    donowContainer.addEventListener('dragover', function(e){
         e.preventDefault();
-        let hours = parseInt(document.querySelector("#timer-hours").value) || 0;
-        let minutes = parseInt(document.querySelector("#timer-minutes").value) || 0;
-        let seconds = parseInt(document.querySelector("#timer-seconds").value) || 0;
-        let totalSeconds = hours*3600 + minutes*60 + seconds;
-        if(totalSeconds>0 && currentTimerTaskIndex !== null){
-            startCountdown(totalSeconds, currentTimerTaskIndex);
-        }
-        else{
-            alert("Please select a task and enter a valid time");
+    });
+    donowContainer.addEventListener('drop', function(e){
+        e.preventDefault();
+        const data = e.dataTransfer.getData('text/plain');
+        const idx = parseInt(data, 10);
+        if (!Number.isNaN(idx) && tasks[idx]){
+            if (tasks[idx].state !== 'Done'){
+                tasks[idx].doNow = true;
+                saveTasks();
+                updatedonowlist();
+            } else {
+                alert('Task already completed');
+            }
         }
     });
-
-}
-const skiptimerbtn=document.querySelector(".skip-timer-btn");
-if (skiptimerbtn) {
-    skiptimerbtn.addEventListener("click", function(){
-        if (currentTimerTaskIndex !== null) {
-            tasks[currentTimerTaskIndex].state = "Done";
-            updateTaskList();
-            updateProgressNavigation();
-        }
-        document.querySelector(".timer-popup").style.display = "none";
-    }
-);
+    
 }
 function updatedonowlist(){
-    let donowlistcontainer=document.querySelector(".donow");
-    donowContainer.innerHTML="";
-    tasks.forEach(function(task,index){
-        let donowitem=document.createElement("div");
+    const donowRoot = document.querySelector(".donow");
+    if (!donowRoot) return;
+
+    let itemsContainer = donowRoot.querySelector(".donow-items");
+    if (!itemsContainer) {
+        itemsContainer = document.createElement("div");
+        itemsContainer.className = "donow-items";
+        donowRoot.appendChild(itemsContainer);
+    }
+    itemsContainer.innerHTML = "";
+
+        const remaining = tasks.filter(t => t.doNow && t.state !== "Done");
+    remaining.forEach(function(task,index){
+        const donowitem = document.createElement("div");
         donowitem.classList.add("donow-item");
-        if (task.state !== "Done") {
-            donowitem.innerHTML=`
-            <div class="donow-item">
-            <h3>${task.name}</h3>
-            <p id="due">Due-Date:${task.date}</p>
+        donowitem.innerHTML = `
+            <div class="donow-item-content">
+                <h3>${task.name}</h3>
+                <p id="due">Due-Date:${task.date || ""}</p>
+                <p class="duration">Duration: ${formatSeconds(task.durationSeconds || 0)}</p>
             </div>
-            <button class="start-timer-btn" data-index="${index}">Start Timer</button>
-            
-            `
-            donowlistcontainer.appendChild(donowitem);
-            }
-        });
+        `;
+        itemsContainer.appendChild(donowitem);
+    });
+
+    const summaryEl = donowRoot.querySelector(".completion-summary");
+    
+           summaryEl.textContent = `${remaining.length}`;
+    }
+
+
+let sequencing = false;
+let activeIntervalCancel = null; 
+let isBreak = false; 
+let paused = false;
+let activeTick = null; 
+let remainingSeconds = 0; 
+async function runDoNowSequence(){
+    if (sequencing) return; 
+    sequencing = true;
+    try{
+       
+        const timerPopup = document.querySelector('.timer-popup');
+        if (timerPopup) timerPopup.style.display = 'flex';
+        const controlsToDisable = document.querySelectorAll('#timer-hours, #timer-minutes, #timer-seconds, .start-timer');
+        controlsToDisable.forEach(el => { if (el) el.disabled = true; });
+        const startAllBtn = document.querySelector('.start-all-btn');
+        if (startAllBtn) startAllBtn.disabled = true;
         
+        const queue = tasks
+            .map((t, idx) => ({ t, idx }))
+            .filter(x => x.t.doNow && x.t.state !== 'Done');
+        for (let i=0; i<queue.length; i++){
+            const { idx } = queue[i];
+            const duration = tasks[idx].durationSeconds || 0;
+            if (duration <= 0) {
+               
+                continue;
+            }
+                isBreak = false;
+            const nameEl = document.querySelector('.taskname');
+                if (nameEl)
+                    {
+                        nameEl.textContent = tasks[idx]?.name || '';
+                    } 
+            await countdownPromise(duration, idx);
+            
+            
+            tasks[idx].state = 'Done';
+           tasks[idx].doNow = false;
+            saveTasks();
+            updateTaskList();
+            updateProgressNavigation();
+            updatedonowlist();
+            //break here
+            if (i < queue.length - 1){
+                isBreak = true;
+                const tname = document.querySelector('.taskname').textContent = '';
+                
+                await breakCountdownPromise(30);
+            }
         }
+    } finally {
+        sequencing = false;
+       
+
+        const controlsToEnable = document.querySelectorAll('#timer-hours, #timer-minutes, #timer-seconds, .start-timer');
+        
+    controlsToEnable.forEach(el => { if (el) el.disabled = false; });
+        const startAllBtn = document.querySelector('.start-all-btn');
+        
+      
+            startAllBtn.disabled = false;
+                      
+                  const timerPopup = document.querySelector('.timer-popup');
+             timerPopup.style.display = 'none';
+       
+        updateTaskList();
+        updateProgressNavigation();
+        updatedonowlist();
+    }
+}
+
+function countdownPromise(totalSeconds){
+    return new Promise(resolve => {
+        
+        const countdownElement = document.querySelector('#countdown-timer');
+        const countdownWrapper = document.querySelector('.countdown-display');
+        if (countdownWrapper) countdownWrapper.style.display = 'block';
+        let secondsLeft = totalSeconds;
+        remainingSeconds = secondsLeft;
+        const interval = setInterval(() => {
+            if (paused) return; 
+            const h = Math.floor(secondsLeft/3600);
+            const m = Math.floor((secondsLeft%3600)/60);
+            const s = secondsLeft%60;
+            if (countdownElement) countdownElement.innerHTML = `Time Remaining: ${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+            if (secondsLeft <= 0){
+                clearInterval(interval);
+                if (countdownElement) countdownElement.innerHTML = "Time's up!";
+                resolve();
+            }
+            secondsLeft--;
+            remainingSeconds = secondsLeft;
+        }, 1000);
+        activeTick = interval;
+        activeIntervalCancel = () => { clearInterval(interval); resolve(); };
+    });
+}
+
+function breakCountdownPromise(totalSeconds){
+    return new Promise(resolve => {
+        const countdownElement = document.querySelector('#countdown-timer');
+        const countdownWrapper = document.querySelector('.countdown-display');
+        if (countdownWrapper) countdownWrapper.style.display = 'block';
+        let secondsLeft = totalSeconds;
+        remainingSeconds = secondsLeft;
+        const interval = setInterval(() => {
+            if (paused) return;
+            const h = Math.floor(secondsLeft/3600);
+            const m = Math.floor((secondsLeft%3600)/60);
+            const s = secondsLeft%60;
+            if (countdownElement) countdownElement.innerHTML = `Break: ${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+            if (secondsLeft <= 0){
+                clearInterval(interval);
+                resolve();
+            }
+            secondsLeft--;
+            remainingSeconds = secondsLeft;
+        }, 1000);
+        activeTick = interval;
+        activeIntervalCancel = () => { clearInterval(interval); resolve(); };
+    });
+}
+
+document.addEventListener('click', function(e){
+    const target = e.target;
+    if (target && target.classList && target.classList.contains('start-all-btn')){
+       
+        const timerPopup = document.querySelector('.timer-popup');
+        if (timerPopup) timerPopup.style.display = 'flex';
+        runDoNowSequence();
+    }
+    if (target && target.classList && target.classList.contains('pause-resume-btn')){
+        paused = !paused;
+        target.textContent = paused ? 'Resume' : 'Pause';
+    }
+    if (target && target.closest('.skiptask')){
+        if (activeIntervalCancel){
+            activeIntervalCancel();
+        }
+        
+        if (!isBreak){
+            const idx = tasks.findIndex(t => t.state === 'In Progress' || t.state === 'Not started');
+            if (idx !== -1){
+                tasks[idx].state = 'Done';
+                tasks[idx].doNow = false;
+                saveTasks();
+                updateTaskList();
+                updateProgressNavigation();
+                updatedonowlist();
+            }
+        }
+    }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    tasks = loadTasks();
+    updateTaskList();
+    updateProgressNavigation();
+    updatedonowlist();
+});
+        

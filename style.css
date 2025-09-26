@@ -262,6 +262,15 @@ button:hover{
     font-size: 3rem;
     font-weight: bold;
 }
+
+.taskname{
+    width: 100%;
+    text-align: center;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #333;
+    margin-top: 6px;
+}
 .timer-controls{
     display: flex;
     gap: 1px;
@@ -320,44 +329,60 @@ button:hover{
     flex-direction: row;
     align-items: center;
 }
-.timer-close-header{
-    display: flex;
-    justify-content:space-between;
-    position:relative;
-    top:0;
-    width: 100vw ;
-    align-items: center;
-    margin-bottom: 10px;
-    height: fit-content;
-    
-}
 .start-timer{
     align-self: center; 
     margin-top: 10px;
     position: relative;
-    left: 50%;
+    left: 35%;
 }
-.close-timer-btn{
-    align-self: flex-end;
-    background-color: var(--header-bg-color);
-    border: none;
-    color: white;
+.countdown-display{
+    margin-top: 20px;
     font-size: 1.5rem;
-    width: 100px;
-    height: 40px;
-    border-radius: 5%;
+    font-weight: bold;
+    text-align: center;
+    width: 100%;
+}
+.countdown-display h3{
+    color: black;
+}   
+#countdown-timer{
+    font-size: 2rem;
+}
+.skiptask{
+    width: 100%;
     display: flex;
     justify-content: center;
-    align-items: center;
+    margin-top: 16px;
+}
+.pauseResume{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 8px;
+}
+.pauseResume .pause-resume-btn{
+    background: #1677ff;
+    border: none;
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.3s ease;
 }
-.close-timer-btn:hover{
-    background-color: var(--header-box-color);      
+.pauseResume .pause-resume-btn:hover{
+    background: #4096ff;
 }
-.skip-timer-btn{
-    align-self: center; 
-    margin-top: 10px;
+.skiptask button{
+    background: #ff4d4f;
+    border: none;
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.skiptask button:hover{
+   
+    background: #ff7875;
+}
 
-
-}
