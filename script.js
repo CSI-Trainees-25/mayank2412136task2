@@ -213,7 +213,7 @@ if (donowContainer) {
 }
 function updatedonowlist(){
     const donowRoot = document.querySelector(".donow");
-    if (!donowRoot) return;
+    
 
     let itemsContainer = donowRoot.querySelector(".donow-items");
     if (!itemsContainer) {
@@ -263,7 +263,7 @@ async function runDoNowSequence(){
         
         const queue = tasks
             .map((t, idx) => ({ t, idx }))
-            .filter(x => x.t.doNow && x.t.state !== 'Done');
+            .filter(x => x.t.doNow);
         for (let i=0; i<queue.length; i++){
             const { idx } = queue[i];
             const duration = tasks[idx].durationSeconds || 0;
@@ -289,7 +289,7 @@ async function runDoNowSequence(){
             //break here
             if (i < queue.length - 1){
                 isBreak = true;
-                const tname = document.querySelector('.taskname').textContent = '';
+                document.querySelector('.taskname').textContent = '';
                 
                 await breakCountdownPromise(30);
             }
@@ -369,17 +369,17 @@ function breakCountdownPromise(totalSeconds){
 
 document.addEventListener('click', function(e){
     const target = e.target;
-    if (target && target.classList && target.classList.contains('start-all-btn')){
+    if ( target.classList.contains('start-all-btn')){
        
         const timerPopup = document.querySelector('.timer-popup');
         if (timerPopup) timerPopup.style.display = 'flex';
         runDoNowSequence();
     }
-    if (target && target.classList && target.classList.contains('pause-resume-btn')){
+    if ( target.classList.contains('pause-resume-btn')){
         paused = !paused;
         target.textContent = paused ? 'Resume' : 'Pause';
     }
-    if (target && target.closest('.skiptask')){
+    if (target.closest('.skiptask')){
         if (activeIntervalCancel){
             activeIntervalCancel();
         }
