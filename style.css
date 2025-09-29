@@ -242,7 +242,6 @@ button:hover{
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
     display: none;
     justify-content: center;
     align-items: center;
@@ -386,3 +385,42 @@ button:hover{
     background: #ff7875;
 }
 
+#title-error{
+    display: none;
+    color: red;
+    font-size: 0.9rem;
+}
+.start-all-btn{
+    background-color: var(--header-bg-color);
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    width: 150px;
+    height: 40px;
+    border-radius: 5%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.start-all-btn:hover{
+    background-color: var(--header-box-color);
+}
+
+.remove-donow-btn {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: background-color 0.3s;
+}
+
+.remove-donow-btn:hover {
+    background-color: #da190b;
+}

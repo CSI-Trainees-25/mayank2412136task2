@@ -1,0 +1,369 @@
+.progress-navigation-timer{
+    font-size: 2rem;
+    margin-top: 10px;
+    padding: 10px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+main{
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    margin-top: 20px;
+    
+
+    min-height: 80vh;
+}
+.back-btn{
+    top: 20px;
+    left: 20px;
+    font-size: 2rem;
+    text-decoration: none;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    height: 55px;
+    padding: 0px 20px;
+    border-radius: 5px;
+    width: fit-content;
+}
+
+/* Task Queue Styles */
+.current-task-display {
+    width: 100%;
+    padding: 20px;
+}
+
+.task-card {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.task-card h2 {
+    color: #666;
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.task-name {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Timer Display Styles */
+.timer-display {
+    text-align: center;
+    margin: 25px 0;
+    padding: 20px;
+    background: #f8fafc;
+    border-radius: 12px;
+    border: 2px solid #e5e7eb;
+}
+
+.countdown-timer {
+    font-size: 48px;
+    font-weight: bold;
+    color: white;
+    background-color:  #9300e8;
+    font-family: monospace;
+    margin-bottom: 15px;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    letter-spacing: 2px;
+}
+
+
+.timer-controls {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.timer-controls button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.start-timer-btn {
+    background: #22c55e;
+    color: white;
+}
+
+.start-timer-btn:hover {
+    background: #16a34a;
+    transform: translateY(-1px);
+}
+
+.pause-timer-btn {
+    background: #f59e0b;
+    color: white;
+}
+
+.pause-timer-btn:hover {
+    background: #d97706;
+    transform: translateY(-1px);
+}
+
+.stop-timer-btn {
+    background: #ef4444;
+    color: white;
+}
+
+.stop-timer-btn:hover {
+    background: #dc2626;
+    transform: translateY(-1px);
+}
+
+.task-details {
+    display: grid;
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.detail-item:last-child {
+    border-bottom: none;
+}
+
+.label {
+    font-weight: 500;
+    color: #666;
+}
+
+.priority-high {
+    background: #fee2e2;
+    color: #dc2626;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.priority-medium {
+    background: #fef3c7;
+    color: #d97706;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.priority-low {
+    background: #dcfce7;
+    color: #16a34a;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.status {
+    color: #0ea5e9;
+    font-weight: 500;
+}
+
+.task-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.mark-done-btn, .skip-task-btn {
+    width: fit-content;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 14px;
+}
+
+.mark-done-btn {
+    background: #22c55e;
+    color: white;
+    flex: 1;
+}
+
+.mark-done-btn:hover {
+    background: #16a34a;
+    transform: translateY(-1px);
+}
+
+.skip-task-btn {
+    background: var(--header-bg-color);
+    color: white;
+    flex: 1;
+}
+
+.skip-task-btn:hover {
+    background: #4b5563;
+    transform: translateY(-1px);
+}
+
+.queue-preview {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.queue-preview h4 {
+    color: #374151;
+    margin-bottom: 15px;
+    font-size: 16px;
+}
+
+.next-tasks {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.next-task-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+    background: white;
+    border-radius: 8px;
+    border-left: 3px solid #e5e7eb;
+}
+
+.task-number {
+    background: #e5e7eb;
+    color: #374151;
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    min-width: 24px;
+    text-align: center;
+}
+
+.next-task-item .task-name {
+    flex: 1;
+    font-size: 14px;
+    margin-bottom: 0;
+    text-align: left;
+}
+
+.task-duration {
+    color: #6b7280;
+    font-size: 12px;
+}
+
+.more-tasks {
+    color: #6b7280;
+    font-style: italic;
+    text-align: center;
+    padding: 8px;
+}
+
+.completion-message {
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 300px;
+}
+
+.completion-card {
+    background: white;
+    border-radius: 12px;
+    padding: 40px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    max-width: 400px;
+}
+
+.completion-card h2 {
+    color: #22c55e;
+    margin-bottom: 15px;
+    font-size: 28px;
+}
+
+.completion-card p {
+    color: #666;
+    margin-bottom: 25px;
+    line-height: 1.6;
+}
+
+.completion-stats {
+    margin: 25px 0;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stat-number {
+    font-size: 36px;
+    font-weight: bold;
+    color: #22c55e;
+}
+
+.stat-label {
+    color: #666;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.restart-queue-btn {
+    background: #3b82f6;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin: 10px;
+}
+
+.restart-queue-btn:hover {
+    background: #2563eb;
+    transform: translateY(-1px);
+}
+
+.back-to-main-btn {
+    background: #6b7280;
+    color: white;
+    padding: 12px 24px;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s;
+    display: inline-block;
+    margin: 10px;
+}
+
+.back-to-main-btn:hover {
+    background: #4b5563;
+    transform: translateY(-1px);
+}
